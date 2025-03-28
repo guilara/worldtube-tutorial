@@ -151,11 +151,11 @@ def submit_job(
         # how many iterations are done
         "iterations": iterations,
         # sets the parameters of the function that controls the excision sphere radii
-        "r0": r0,
+        "rb": r0,
         "amp": amp,
         "exp": 1.5,
         "delta": 0.05,
-        "r0_bh": r0_bh,
+        "rb_bh": r0_bh,
         "amp_bh": amp_bh,
         "exp_bh": 1.0,
         "delta_bh": 0.05,

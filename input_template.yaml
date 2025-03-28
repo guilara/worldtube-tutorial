@@ -8,6 +8,9 @@
 Parallelization:
   ElementDistribution: NumGridPoints
 
+Interpolator:
+  Verbosity: Silent
+
 AnalyticData:
   ZerothOrderPuncture:
     ParticlePosition: {{particle_position}}
