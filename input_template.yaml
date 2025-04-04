@@ -58,14 +58,14 @@ DomainCreator:
       ObjectACube: [1, 1, 1]
       ObjectBCube: [2, 2, 1]
       Envelope: [1, 1, 4]
-      OuterShell: [1, 1, 5]
+      OuterShell0: [1, 1, 5]
     InitialGridPoints:
       ObjectAShell: [{{10 + P}}, {{10 + P}}, {{11 + P}}]
       ObjectBShell: [{{10 + P}}, {{10 + P}}, {{12 + P}}]
       ObjectACube: [{{11 + P}}, {{11 + P}}, {{10+ P}}]
       ObjectBCube: [{{10 + P}}, {{10 + P}}, {{11 + P}}]
       Envelope: [{{12 + P}}, {{12 + P}}, {{12 + P}}]
-      OuterShell: [{{10 + P}}, {{10 + P}}, {{10 + P}}]
+      OuterShell0: [{{10 + P}}, {{10 + P}}, {{10 + P}}]
     UseEquiangularMap: true
     CenterOfMassOffset: [0.,0.]
     ObjectB:
@@ -87,6 +87,7 @@ DomainCreator:
       Radius: 400.
     OuterShell:
       Radius: 900.
+      RadialPartitioning: []
       RadialDistribution: Linear
       OpeningAngle: 120.0
       BoundaryCondition: ConstraintPreservingSphericalRadiation
