@@ -1,6 +1,7 @@
 import os
 from scipy.integrate import quad
 import numpy as np
+np.set_printoptions(legacy='1.25')
 from scipy.optimize import root_scalar, root
 from jinja2 import Template
 
