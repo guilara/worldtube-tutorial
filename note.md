@@ -41,7 +41,15 @@ These commands also work recursively for entire directories. Bt specifying only 
 ```bash
 git commit -m "{Message for your commit}"
 ```
-Commits all staged changes to the remote branch. Other poeple can  see your content.
+Commits all staged changes to the remote branch. Other poeple are not abble to see your changes yet on the local repository for that push is required.
+
+It is also highly advised that you tag your commits with messages as they help highlight what each commit was done for.
+
+### 5. Pushing changes to the remote
+```bash
+git push
+```
+Commited changes only exist on the local repository. They are the "checkpoints" with which you can review changes as they are done, with documentation on what changed, and when.
 
 ## SpECTRE
 
@@ -51,5 +59,23 @@ Commits all staged changes to the remote branch. Other poeple can  see your cont
 
 #### 2. EvolveScalarAdvection2D & Kuzmin2D
 
+### Notes on running SpECTRE on Urania
+
+#### The Input File (.yaml)
+
+#### The bash file (.sh)
+
+#### Python Bindings
+
 ## Theoretical Background
+
+### The Worldtube
+
+### The Self-Force
+
+### Coordinate System
+
+### Trajectories
+
+### Scalar Fields
 
