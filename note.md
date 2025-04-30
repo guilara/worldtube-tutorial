@@ -1,7 +1,5 @@
 # Compiled Notes for Worldtube Masters Project
 
-## Theoretical Background
-
 ## Git
 
 We are working with two main repositories. One is the spectre repo which includes our executables and builds. Files are then run via batch jobs in the ptmp directory. We work on a fork of the develop branch of spectre. The goal is to work on multiple forks, with each fork representing versions of codes for each PR paper. Upon approval of each fork, we can get pull requests approved to merge these forks to the main develop repo.
@@ -52,3 +50,6 @@ Commits all staged changes to the remote branch. Other poeple can  see your cont
 #### 1. ExportCoordinates3D & InputTimeDependent3D
 
 #### 2. EvolveScalarAdvection2D & Kuzmin2D
+
+## Theoretical Background
+
