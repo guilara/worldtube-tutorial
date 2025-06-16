@@ -35,13 +35,13 @@ source $SPECTRE_HOME/env/bin/activate
 Next, create a build directory called e.g. worldtube-build. From it, you can now run CMake to configure your installation.A sensible example command would be (make sure to replace PATH_TO_YOUR_SPECTRE_DIRECTORY):
 
 ```
-cmake -D CMAKE_C_COMPILER=gcc -D CMAKE_CXX_COMPILER=g++ -D CMAKE_Fortran_COMPILER=gfortran -D CHARM_ROOT=/u/guilara/charm_impi_3/mpi-linux-x86_64-smp -D CMAKE_BUILD_TYPE=Release -D DEBUG_SYMBOLS=ON -D BUILD_SHARED_LIBS=ON -D MEMORY_ALLOCATOR=SYSTEM -D BUILD_PYTHON_BINDINGS=ON -D Python_EXECUTABLE=/u/guilara/repos/spectre/env/bin/python -D Catch2_DIR=/u/guilara/repos/Catch2/install_dir/lib64/cmake/Catch2 -D MPI_C_COMPILER=/mpcdf/soft/SLE_15/packages/skylake/impi/gcc_11-11.2.0/2021.7.1/bin/mpigcc -D MPI_CXX_COMPILER=/mpcdf/soft/SLE_15/packages/skylake/impi/gcc_11-11.2.0/2021.7.1/bin/mpig++ -D MPI_Fortran_COMPILER=/mpcdf/soft/SLE_15/packages/skylake/impi/gcc_11-11.2.0/2021.7.1/bin/mpigfortran PATH_TO_YOUR_SPECTRE_DIRECTORY -G Ninja
+cmake -D CMAKE_C_COMPILER=gcc -D CMAKE_CXX_COMPILER=g++ -D CMAKE_Fortran_COMPILER=gfortran -D CHARM_ROOT=/u/guilara/charm_impi_3/mpi-linux-x86_64-smp -D CMAKE_BUILD_TYPE=Release -D DEBUG_SYMBOLS=ON -D BUILD_SHARED_LIBS=ON -D MEMORY_ALLOCATOR=SYSTEM -D BUILD_PYTHON_BINDINGS=ON -D Python_EXECUTABLE=/u/guilara/repos/spectre/env/bin/python -D Catch2_DIR=/u/guilara/repos/Catch2/install_dir/lib64/cmake/Catch2 -D MPI_C_COMPILER=/mpcdf/soft/SLE_15/packages/skylake/impi/gcc_11-11.2.0/2021.7.1/bin/mpigcc -D MPI_CXX_COMPILER=/mpcdf/soft/SLE_15/packages/skylake/impi/gcc_11-11.2.0/2021.7.1/bin/mpig++ -D MPI_Fortran_COMPILER=/mpcdf/soft/SLE_15/packages/skylake/impi/gcc_11-11.2.0/2021.7.1/bin/mpigfortran $SPECTRE_HOME
 ```
 
 To build the worldtube project, simply run:
 
 ```
-ninja EvolveWorldtubeCurvedScalarWaveKerrSchild3D -j 32
+make -j32 EvolveWorldtubeCurvedScalarWaveKerrSchild3D
 ```
 
 ## The slurm launch template
