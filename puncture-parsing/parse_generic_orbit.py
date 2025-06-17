@@ -86,12 +86,13 @@ void puncture_field_acc_0(
     const tnsr::I<DataVector, 3, Frame::Inertial>& centered_coords,
     const tnsr::I<double, 3>& particle_position,
     const tnsr::I<double, 3>& particle_velocity,
-    const tnsr::I<double, 3>& particle_acceleration, const double BH_mass) {{
+    const tnsr::I<double, 3>& particle_acceleration, const double BH_mass,
+    const std::array<double,3> &BH_spin) {{
   const size_t grid_size = get<0>(centered_coords).size();
   result->initialize(grid_size);
   const double xp = particle_position[0];
   const double yp = particle_position[1];
-  const double yp = particle_position[2];
+  const double zp = particle_position[2];
   const double xpdot = particle_velocity[0];
   const double ypdot = particle_velocity[1];
   const double zpdot = particle_velocity[2];
@@ -101,13 +102,14 @@ void puncture_field_acc_0(
   const double zpddot = particle_acceleration[2];
 
   const double rp = get(magnitude(particle_position));
-  const double rpdot = (xp * xpdot + yp * ypdot) / rp;
+  const double rpdot = (xp * xpdot + yp * ypdot + zp * zpdot) / rp;
 
   const auto& Dx = get<0>(centered_coords);
   const auto& Dy = get<1>(centered_coords);
   const auto& Dz = get<2>(centered_coords);
 
   const double M = BH_mass;
+  const double a = BH_spin[2];
 
     DynamicBuffer<DataVector> temps({number_of_temps}, grid_size);
 
@@ -174,7 +176,7 @@ for i, (name, expr) in enumerate(subexpr):
         if sym not in root_symbols:
             expr = expr.subs(sym, exprs[temp_symbols[sym]])
     new_symbol = None
-    if Dx in expr.free_symbols or Dy in expr.free_symbols or z in expr.free_symbols:
+    if Dx in expr.free_symbols or Dy in expr.free_symbols or Dz in expr.free_symbols:
         new_symbol = next(dv_symbols)
         dvs.append((new_symbol, old_expr))
     else:
@@ -265,5 +267,5 @@ import re
 
 full_file_to_write = re.sub(r"\s(\d)\s", r"\1\.0", full_file_to_write)
 
-with open("PunctureField.cpp", "w") as f:
+with open("PunctureFieldKerrOrder0.cpp", "w") as f:
     f.write(full_file_to_write)
