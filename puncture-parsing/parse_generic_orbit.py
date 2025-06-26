@@ -174,7 +174,7 @@ for i, (name, expr) in enumerate(subexpr):
         if sym not in root_symbols:
             expr = expr.subs(sym, exprs[temp_symbols[sym]])
     new_symbol = None
-    if Dx in expr.free_symbols or Dy in expr.free_symbols or z in expr.free_symbols:
+    if Dx in expr.free_symbols or Dy in expr.free_symbols or Dz in expr.free_symbols:
         new_symbol = next(dv_symbols)
         dvs.append((new_symbol, old_expr))
     else:
