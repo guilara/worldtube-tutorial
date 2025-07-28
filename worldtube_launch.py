@@ -51,7 +51,7 @@ def submit_job(
     turn_on_interval,):
 
 
-    circular_test='Quasicircular' if orbit_radius==1/initial_velocity**2 else 'Eccentric'
+    circular_test='Quasicircular' if initial_velocity==1/orbit_radius**0.5 else 'Eccentric'
     base_dir = f"{circular_test}_r{int(orbit_radius)}_eps{str(particle_charge).split('.')[1]}"
     print(f"Running simulation in base directory: {base_dir}")
     os.mkdir(base_dir)
