@@ -17,6 +17,24 @@ def turning_points(p,e):
 def va(p,e):
     return (1-e)/p**0.5*np.sqrt((2-2*e-p)/(2+2*e-p))
 
+#Define the Energy and Angular momentum from p,e
+def constants_motion(p,e):
+    energy=np.sqrt(((p-2)**2-4*e**2)/(p*(p-3-e**2)))
+    ang_mom=np.sqrt((p**2)/(p-3-e**2))
+
+    return energy,ang_mom
+
+#Define the radial equation in terms of p,e and r
+def radial_eq(r,p,e):
+    energy,ang_mom=constants_motion(p,e)
+    fact = (1.0 - 2.0 / r) * np.sqrt(1.0 - (1 - 2 / r) * (1 + ang_mom**2 / r**2) / energy**2)
+    return -1 / fact
+
+#Summarise the radial period for
+def rad_period(p,e):
+    ra,rp=turning_points(p,e)
+    return 2.0*quad(radial_eq,ra,rp,(p,e))[0]
+
 #Define functions to set the worldtube radii for BH and scalar charge
 ##It uses a broken power law series and root finds for the r0 values which is fixed based on values at r_p=6M
 def power_law(r,r6,amp,exp,delta):
@@ -52,7 +70,7 @@ def submit_job(
 
 
     circular_test='Quasicircular' if initial_velocity==1/orbit_radius**0.5 else 'Eccentric'
-    base_dir = f"{circular_test}_r{int(orbit_radius)}_eps{str(particle_charge).split('.')[1]}"
+    base_dir = f"Phase_Tsf{turn_on_time:.0f}_{circular_test}_r{int(orbit_radius)}_eps{str(particle_charge).split('.')[1]}"
     print(f"Running simulation in base directory: {base_dir}")
     os.mkdir(base_dir)
 
@@ -132,8 +150,9 @@ if __name__ == "__main__":
         #Set the orbital parameters
         orbit_radius=turning_points(semi_lactus,ecc)[0]
         initial_velocity=va(semi_lactus,ecc)
-        radial_period=None if ecc==0 else 2*np.pi/(orbit_radius**(-3/2)*np.sqrt((orbit_radius-6)/(orbit_radius-3)))
-        print(f"Orbital radius:{orbit_radius}, Initial velocity:{initial_velocity}, Radial Period (if circular):{radial_period}")
+        radial_period=rad_period(semi_lactus,ecc) if ecc!=0 else 2*np.pi/(orbit_radius**(-3/2)*np.sqrt((orbit_radius-6)/(orbit_radius-3)))
+        print(f"Orbital radius: {orbit_radius:.3f}, Initial velocity: {initial_velocity:.6f}")
+        print(f"Semi-Lactus Rectum: {semi_lactus:.2f}, Eccentricity: {ecc:.2f}, Radial Period: {radial_period:.3f}")
 
     #Set up the wordtube and BH excision parameters
     delta=0.05
@@ -144,7 +163,7 @@ if __name__ == "__main__":
     r0=root(root_find_func,x0=(23.0),args=(wt_radius_at_isco,amp,exp,delta)).x[0] #WT excision radius (Fixed parameters with value @ r_p=6M)
     worldtube_radius=power_law(orbit_radius,r0,amp,exp,delta) #WT radius at t=0
     fixed_worldtube_radius=power_law(6.0,r0,amp,exp,delta) #WT radius at 6M
-    print(f"Initial WT radius:{worldtube_radius}, $r_0$:{r0}, WT radius at 6M is 0.8?:{fixed_worldtube_radius-0.8<0.0001}") #Verification of WT parameters
+    print(f"Initial WT radius: {worldtube_radius:.3f}, r_0: {r0:.3f}, WT radius at 6M is 0.8?: {fixed_worldtube_radius-0.8<0.0001}") #Verification of WT parameters
 
     exp_bh=1.0 #Exponent for the power law
     amp_bh=1.9 #BH excision @ infinity
@@ -153,7 +172,7 @@ if __name__ == "__main__":
     args=(bh_radius_at_isco,amp_bh,exp_bh,delta)).x[0] #BH excision radius (Fixed parameters with value @ r_p=6M)
     bh_radius=power_law(orbit_radius,r0_bh,amp_bh,exp_bh,delta) #BH radius at t=0
     fixed_bh_radius=power_law(6.0,r0_bh,amp_bh,exp_bh,delta) #BH radius at 6M
-    print(f'Initial BH radius:{bh_radius}, $r0_bh$:{r0_bh}, BH radius at 6M is 1.9?:{fixed_bh_radius-1.9<0.0001}') #Verification of BH parameters
+    print(f'Initial BH radius: {bh_radius:.3f}, r0_bh: {r0_bh:.3f}, BH radius at 6M is 1.9?: {fixed_bh_radius-1.9<0.0001}') #Verification of BH parameters
 
 
     #Strength of scalar field parameters
@@ -167,7 +186,7 @@ if __name__ == "__main__":
     #Setting simulation parameters
     expansion_order=1 #Order of the puncture field?
     lev=0 #The level of refinement of the grid points
-    node_num=4
+    node_num=8
 
     response=input("Do you want to run the simulation? (y/n): ")
     if response=='y':

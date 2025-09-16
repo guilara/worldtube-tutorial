@@ -238,48 +238,49 @@ def extract_sim_data(file_name):
 def get_osculating_elements(sim_data):
     energy = sim_data["energy"]
     ang_mom = sim_data["angular_momentum"]
-    a = energy**2-1
-    b = 2.
-    c = -ang_mom**2
-    d = 2*ang_mom**2
+    a = energy**2 - 1
+    b = 2.0
+    c = -(ang_mom**2)
+    d = 2 * ang_mom**2
 
-    bigp = (3 * a * c - b**2)/(3 * a**2)
-    bigq = (2 * b**3 - 9 * a * b * c + 27 * a**2 * d)/(27 * a**3)
+    bigp = (3 * a * c - b**2) / (3 * a**2)
+    bigq = (2 * b**3 - 9 * a * b * c + 27 * a**2 * d) / (27 * a**3)
 
-    bool_list=4 * bigp**3 + 27 * bigq**2 <= 0
-    print('Fraction of data points with < 3 real roots:',np.sum(bool_list)/len(bool_list))
-    bigp=bigp[bool_list]
-    bigq=bigq[bool_list]
-    a=a[bool_list]
+    bool_list = 4 * bigp**3 + 27 * bigq**2 <= 0
+    print(
+        "Fraction of data points with 3 real roots:", np.sum(bool_list) / len(bool_list)
+    )
 
     theta = np.arccos(3 * bigq / (2 * bigp) * np.sqrt(-3 / bigp))
-    amp = 2 * np.sqrt(- bigp / 3)
+    amp = 2 * np.sqrt(-bigp / 3)
 
-    roots = np.stack([amp * np.cos(theta / 3) - b / (3 * a),
-     amp * np.cos((theta - 2 * np.pi) / 3) - b / (3 * a),
-     amp * np.cos((theta - 4 * np.pi) / 3) - b / (3 * a)], axis=1) # shape (N, 3)
-    roots_sorted = np.sort(roots, axis=1) # shape (N, 3)
-    _, rp, ra = roots_sorted.T # Unpack: smallest, middle, largest
+    roots = np.stack(
+        [
+            amp * np.cos(theta / 3) - b / (3 * a),
+            amp * np.cos((theta - 2 * np.pi) / 3) - b / (3 * a),
+            amp * np.cos((theta - 4 * np.pi) / 3) - b / (3 * a),
+        ],
+        axis=1,
+    )  # shape (N, 3)
+    roots_sorted = np.sort(roots, axis=1)  # shape (N, 3)
+    _, rp, ra = roots_sorted.T  # Unpack: smallest, middle, largest
 
     semi_osculating = 2.0 * ra * rp / (ra + rp)
     ecc_osculating = (ra - rp) / (ra + rp)
 
-    # osculating_cutoff = (
-    #     -1
-    #     if not np.any(np.isnan(semi_osculating))
-    #     else np.where(np.isnan(semi_osculating))[0][0]
-    # )
-    # cutoff_index = np.searchsorted(
-    #     sim_data["times"],
-    #     sim_data["turn_on_time"] + 2.0 * sim_data["turn_on_interval"],
-    # )
-    
-    time=sim_data["times"][bool_list]
-    return (ra,rp,semi_osculating,ecc_osculating,time)
-    # return (
-    #     ra[cutoff_index:osculating_cutoff],
-    #     rp[cutoff_index:osculating_cutoff],
-    #     semi_osculating[cutoff_index:osculating_cutoff],
-    #     ecc_osculating[cutoff_index:osculating_cutoff],
-    #     sim_data["times"][cutoff_index:osculating_cutoff],
-    # )
+    osculating_cutoff = (
+        -1
+        if not np.any(np.isnan(semi_osculating))
+        else np.where(np.isnan(semi_osculating))[0][0]
+    )
+    cutoff_index = np.searchsorted(sim_data["times"], sim_data["turn_on_time"])
+
+    time = sim_data["times"][bool_list]
+
+    return (
+        ra[cutoff_index:osculating_cutoff],
+        rp[cutoff_index:osculating_cutoff],
+        semi_osculating[cutoff_index:osculating_cutoff],
+        ecc_osculating[cutoff_index:osculating_cutoff],
+        sim_data["times"][cutoff_index:osculating_cutoff],
+    )

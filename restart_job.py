@@ -23,8 +23,8 @@ restart_folder = os.path.join(abs_base_path, f"Restart{i}")
 os.mkdir(restart_folder)
 
 with open(os.path.join(abs_base_path, "urania.sh"), "r") as f:
-    launch_script = f.readlines()[:-1]
-launch_script.append(f"+restart {checkpoint_folder}\n")
+    launch_script = f.readlines()
+launch_script.append(f" +restart {checkpoint_folder}")
 
 with open(os.path.join(restart_folder, "urania.sh"), "w") as f:
     f.writelines(launch_script)
