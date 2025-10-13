@@ -4,15 +4,15 @@ from sympy.utilities.iterables import numbered_symbols
 from sympy.codegen.rewriting import create_expand_pow_optimization
 from collections import deque
 
-with open(f"Psi0Kerr.txt") as f:
+with open(f"Kerr/Psi0Kerr.txt") as f:
     psi_str = f.read()
-with open(f"dtPsiP0.txt") as f:
+with open(f"Kerr/dtPsi0Kerr.txt") as f:
     dtpsi_str = f.read()
-with open(f"dxPsi0Kerr.txt") as f:
+with open(f"Kerr/dxPsi0Kerr.txt") as f:
     dxpsi_str = f.read()
-with open(f"dyPsi0Kerr.txt") as f:
+with open(f"Kerr/dyPsi0Kerr.txt") as f:
     dypsi_str = f.read()
-with open(f"dzPsi0Kerr.txt") as f:
+with open(f"Kerr/dzPsi0Kerr.txt") as f:
     dzpsi_str = f.read()
 
 #define the symbols that may be needed in the expressions
@@ -44,11 +44,10 @@ with open(f"dzPsi0Kerr.txt") as f:
     Dufxdot,
     Dufydot,
     M,
-    z,
     a,
     l,
 ) = symbols(
-    "xp yp zp xpdot xpddot ypdot ypddot zpdot zpddot Dx Dy Dz rp rpdot fx fy ft fxdot fydot ftdot Duft Dufx Dufy Duftdot Dufxdot Dufydot M z a l"
+    "xp yp zp xpdot xpddot ypdot ypddot zpdot zpddot Dx Dy Dz rp rpdot fx fy ft fxdot fydot ftdot Duft Dufx Dufy Duftdot Dufxdot Dufydot M a l"
 )
 psi = mathematica.parse_mathematica(psi_str)
 dtpsi = mathematica.parse_mathematica(dtpsi_str)
@@ -77,7 +76,7 @@ cpp_file = """
 
 namespace CurvedScalarWave::Worldtube {{
 
-void puncture_field_acc_0(
+void puncture_field_kerr_0(
     gsl::not_null<Variables<tmpl::list<
         CurvedScalarWave::Tags::Psi, ::Tags::dt<CurvedScalarWave::Tags::Psi>,
         ::Tags::deriv<CurvedScalarWave::Tags::Psi, tmpl::size_t<3>,
@@ -161,7 +160,6 @@ root_symbols = [
     Duftdot,
     Dufxdot,
     Dufydot,
-    z,
     a,
     M,
 ]
@@ -267,5 +265,5 @@ import re
 
 full_file_to_write = re.sub(r"\s(\d)\s", r"\1\.0", full_file_to_write)
 
-with open("PunctureFieldKerrOrder0.cpp", "w") as f:
+with open("Kerr/PunctureFieldKerrOrder0.cpp", "w") as f:
     f.write(full_file_to_write)

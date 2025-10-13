@@ -124,3 +124,12 @@ There are also optional lines of code that allows the cluster to notify you via 
 
 ### Scalar Fields
 
+## Scalar Gauss-Bonnet Field
+
+$S[\Psi, g_{a,b}]=\int -(\Nabla\Psi)^2 + f(\Psi)(Riemann^2)$
+Shift Sym: $f(\Psi)=\lambda \Psi$
+Spon. Scal: $f(\Psi)=\nu \Psi^2+\gamma \Psi^4$
+Dilatonic: f(\Psi)=e^{\lambda\Psi}\approx \lambda +\lambda \Psi$
+
+Such that,
+$\box\phi=-f'(\curlypsi)\mathcal{G}$
