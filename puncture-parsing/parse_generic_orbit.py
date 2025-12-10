@@ -4,15 +4,15 @@ from sympy.utilities.iterables import numbered_symbols
 from sympy.codegen.rewriting import create_expand_pow_optimization
 from collections import deque
 
-with open(f"Kerr/Psi0accKerr.txt") as f:
+with open(f"Kerr/Psi0Kerr.txt") as f:
     psi_str = f.read()
-with open(f"Kerr/dtPsi0accKerr.txt") as f:
+with open(f"Kerr/dtPsi0Kerr.txt") as f:
     dtpsi_str = f.read()
-with open(f"Kerr/dxPsi0accKerr.txt") as f:
+with open(f"Kerr/dxPsi0Kerr.txt") as f:
     dxpsi_str = f.read()
-with open(f"Kerr/dyPsi0accKerr.txt") as f:
+with open(f"Kerr/dyPsi0Kerr.txt") as f:
     dypsi_str = f.read()
-with open(f"Kerr/dzPsi0accKerr.txt") as f:
+with open(f"Kerr/dzPsi0Kerr.txt") as f:
     dzpsi_str = f.read()
 
 # define the symbols that may be needed in the expressions
@@ -80,7 +80,7 @@ cpp_file = """
 
 namespace CurvedScalarWave::Worldtube {{
 
-void acceleration_terms_kerr_0(
+void puncture_field_kerr_0(
     gsl::not_null<Variables<tmpl::list<
         CurvedScalarWave::Tags::Psi, ::Tags::dt<CurvedScalarWave::Tags::Psi>,
         ::Tags::deriv<CurvedScalarWave::Tags::Psi, tmpl::size_t<3>,
@@ -89,10 +89,8 @@ void acceleration_terms_kerr_0(
     const tnsr::I<DataVector, 3, Frame::Inertial>& centered_coords,
     const tnsr::I<double, 3>& particle_position,
     const tnsr::I<double, 3>& particle_velocity,
-    const tnsr::I<double, 3>& particle_acceleration, const double ft,
-    const double fx, const double fy, const double fz, const double dt_ft,
-    const double dt_fx, const double dt_fy, const double dt_fz,
-    const double BH_mass, const std::array<double,3> &BH_spin) {{
+    const tnsr::I<double, 3>& particle_acceleration,
+    const double BH_mass, const std::array<double,3>& BH_spin) {{
   const size_t grid_size = get<0>(centered_coords).size();
   result->initialize(grid_size);
   const double xp = particle_position[0];
@@ -154,22 +152,22 @@ root_symbols = [
     zpddot,
     rp,
     rpdot,
-    ft,
-    fx,
-    fy,
-    fz,
-    ftdot,
-    fxdot,
-    fydot,
-    fzdot,
-    Duft,
-    Dufx,
-    Dufy,
-    Dufz,
-    Duftdot,
-    Dufxdot,
-    Dufydot,
-    Dufzdot,
+    # ft,
+    # fx,
+    # fy,
+    # fz,
+    # ftdot,
+    # fxdot,
+    # fydot,
+    # fzdot,
+    # Duft,
+    # Dufx,
+    # Dufy,
+    # Dufz,
+    # Duftdot,
+    # Dufxdot,
+    # Dufydot,
+    # Dufzdot,
     a,
     M,
 ]
@@ -275,5 +273,5 @@ import re
 
 full_file_to_write = re.sub(r"\s(\d)\s", r"\1\.0", full_file_to_write)
 
-with open("Kerr/AccelerationTermsKerrOrder0.cpp", "w") as f:
+with open("Kerr/PunctureFieldKerrOrder0_1.cpp", "w") as f:
     f.write(full_file_to_write)
