@@ -35,10 +35,10 @@ with open(f"Kerr/dzPsi0Kerr.txt") as f:
     fx,
     fy,
     fz,
-    ftdot,
-    fxdot,
-    fydot,
-    fzdot,
+    dt_ft,
+    dt_fx,
+    dt_fy,
+    dt_fz,
     Duft,
     Dufx,
     Dufy,
@@ -90,7 +90,7 @@ void puncture_field_kerr_0(
     const tnsr::I<double, 3>& particle_position,
     const tnsr::I<double, 3>& particle_velocity,
     const tnsr::I<double, 3>& particle_acceleration,
-    const double BH_mass, const std::array<double,3>& BH_spin) {{
+    const double bh_mass, const std::array<double,3>& bh_spin) {{
   const size_t grid_size = get<0>(centered_coords).size();
   result->initialize(grid_size);
   const double xp = particle_position[0];
@@ -111,8 +111,8 @@ void puncture_field_kerr_0(
   const auto& Dy = get<1>(centered_coords);
   const auto& Dz = get<2>(centered_coords);
 
-  const double M = BH_mass;
-  const double a = BH_spin[2];
+  const double M = bh_mass;
+  const double a = bh_spin[2];
 
     DynamicBuffer<DataVector> temps({number_of_temps}, grid_size);
 
@@ -138,9 +138,6 @@ for i in range(10000):
 
 temp_dict = {}
 root_symbols = [
-    Dx,
-    Dy,
-    Dz,
     xp,
     yp,
     zp,
@@ -150,26 +147,30 @@ root_symbols = [
     ypddot,
     zpdot,
     zpddot,
+    Dx,
+    Dy,
+    Dz,
     rp,
     rpdot,
-    # ft,
-    # fx,
-    # fy,
-    # fz,
-    # ftdot,
-    # fxdot,
-    # fydot,
-    # fzdot,
-    # Duft,
-    # Dufx,
-    # Dufy,
-    # Dufz,
-    # Duftdot,
-    # Dufxdot,
-    # Dufydot,
-    # Dufzdot,
-    a,
+    ft,
+    fx,
+    fy,
+    fz,
+    dt_ft,
+    dt_fx,
+    dt_fy,
+    dt_fz,
+    Duft,
+    Dufx,
+    Dufy,
+    Dufz,
+    Duftdot,
+    Dufxdot,
+    Dufydot,
+    Dufzdot,
     M,
+    a,
+    l,
 ]
 double_symbols = numbered_symbols("d_")
 dv_symbols = numbered_symbols("dv_")
