@@ -274,5 +274,5 @@ import re
 
 full_file_to_write = re.sub(r"\s(\d)\s", r"\1\.0", full_file_to_write)
 
-with open("Kerr/PunctureFieldKerrOrder0_1.cpp", "w") as f:
+with open("Kerr/PunctureFieldKerrOrder0.cpp", "w") as f:
     f.write(full_file_to_write)
