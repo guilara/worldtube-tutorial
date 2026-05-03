@@ -93,6 +93,10 @@ void puncture_field_kerr_0(
     const double bh_mass, const std::array<double,3>& bh_spin) {{
   const size_t grid_size = get<0>(centered_coords).size();
   result->initialize(grid_size);
+
+  const double M = bh_mass;
+  const double a = bh_spin[2];
+
   const double xp = particle_position[0];
   const double yp = particle_position[1];
   const double zp = particle_position[2];
@@ -104,15 +108,17 @@ void puncture_field_kerr_0(
   const double ypddot = particle_acceleration[1];
   const double zpddot = particle_acceleration[2];
 
-  const double rp = get(magnitude(particle_position));
-  const double rpdot = (xp * xpdot + yp * ypdot + zp * zpdot) / rp;
+  const double rho = xp * xp + yp * yp + zp * zp - a * a;
+  const double rp = sqrt(rho + sqrt(4 * a * a * zp * zp + rho * rho)) / sqrt(2);
+  const double rhodot = 2 * (xp * xpdot + yp * ypdot + zp * zpdot);
+  const double rpdot =
+      (rhodot + (4 * a * a * zp * zpdot + rho * rhodot) /
+                    sqrt(4 * a * a * zp * zp + rho * rho)) /
+      4 / rp;
 
   const auto& Dx = get<0>(centered_coords);
   const auto& Dy = get<1>(centered_coords);
   const auto& Dz = get<2>(centered_coords);
-
-  const double M = bh_mass;
-  const double a = bh_spin[2];
 
     DynamicBuffer<DataVector> temps({number_of_temps}, grid_size);
 
